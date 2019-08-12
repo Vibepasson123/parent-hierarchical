@@ -50,19 +50,11 @@ export default {
     },
     data(){
         return {
-            getUser:this.user,
-            relationship:"",
-            familyEmail:"",
-            familyMember:"1",
-            familys:[
-                {
-                    email:'',
-                    relationship:''
-
-
-                }
-            ]
-        }
+                    getUser:this.user,
+                    relationship:"",
+                    familyEmail:"",
+                    familyMember:"1",
+               }
     },
     created(){
       this.connect();
@@ -78,65 +70,61 @@ export default {
              const session = this.$neo4j.getSession()
              switch(this.relationship){
                  case 'FATHER':
-                     session.run("MATCH (n:Famliy) WHERE n.email=$email RETURN n",{email: this.familyEmail} )
-                .then(res => {
-                    if(res.records.length==0){
-                         session.run("MATCH (n:Famliy) WHERE n.email=$emailfam CREATE (b:Famliy {email: $email}) MERGE(n)-[r:FATHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",
-                         {email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
-                    .then(res => {
-                        if(res.records.length != undefined){
+                             session.run("MATCH (n:Famliy) WHERE n.email=$email RETURN n",{email: this.familyEmail} )
+                             .then(res => {
+                            if(res.records.length==0){
+                                session.run("MATCH (n:Famliy) WHERE n.email=$emailfam CREATE (b:Famliy {email: $email}) MERGE(n)-[r:FATHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",
+                                {email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
+                                .then(res => {
+                                    if(res.records.length != undefined){
 
-                               this.emptyInput();
+                                        this.emptyInput();
+                                        }
+                                })
+                                .then(() => {
+                                    session.close()
+                                })
+                            }else{
+                                session.run("MATCH (n:Famliy) WHERE n.email=$emailfam MATCH (b:Famliy {email: $email}) MERGE(n)-[r:FATHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",
+                                {email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
+                            .then(res => {
+                                if(res.records.length != undefined){
+
+                                    this.emptyInput();
+                                    }
+                            })
+                            .then(() => {
+                                session.close()
+                            })
+
                             }
-                    })
-                    .then(() => {
-                        session.close()
-                    })
-                    }else{
-                          session.run("MATCH (n:Famliy) WHERE n.email=$emailfam MATCH (b:Famliy {email: $email}) MERGE(n)-[r:FATHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",
-                          {email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
-                    .then(res => {
-                        if(res.records.length != undefined){
-
-                               this.emptyInput();
-                            }
-                    })
-                    .then(() => {
-                        session.close()
-                    })
-
-                    }
-                })
+                        })
 
                     break;
                  case 'MOTHER':
                        session.run("MATCH (n:Famliy) WHERE n.email=$email RETURN n",{email: this.familyEmail} )
                        .then(res => {
                     if(res.records.length==0){
-                       session.run("MATCH (n:Famliy) WHERE n.email=$emailfam CREATE (b:Famliy {email: $email}) MERGE(n)-[r:MOTHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",{email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
-                        .then(res => {
-                           if(res.records.length != undefined){
-
-                               this.emptyInput();
-                            }
-
-                        })
-                        .then(() => {
-                            session.close()
-                        })
-                        }else{
-                             session.run("MATCH (n:Famliy) WHERE n.email=$emailfam MATCH (b:Famliy {email: $email}) MERGE(n)-[r:MOTHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",{email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
-                        .then(res => {
-                           if(res.records.length != undefined){
-
-                               this.emptyInput();
-                            }
-
-                        })
-                        .then(() => {
-                            session.close()
-                        })
-                        }
+                            session.run("MATCH (n:Famliy) WHERE n.email=$emailfam CREATE (b:Famliy {email: $email}) MERGE(n)-[r:MOTHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",{email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
+                                .then(res => {
+                                if(res.records.length != undefined){
+                                    this.emptyInput();
+                                    }
+                                })
+                                .then(() => {
+                                    session.close()
+                                })
+                               }else{
+                                        session.run("MATCH (n:Famliy) WHERE n.email=$emailfam MATCH (b:Famliy {email: $email}) MERGE(n)-[r:MOTHER]->(b) MERGE(b)-[r2:CHILD]->(n) RETURN n,b,r",{email: this.familyEmail,emailfam:this.user.email,relations:this.relationship })
+                                        .then(res => {
+                                        if(res.records.length != undefined){
+                                            this.emptyInput();
+                                            }
+                                        })
+                                        .then(() => {
+                                            session.close()
+                                        })
+                                }
                          })
                      break;
                  case 'GRANDFATHER':

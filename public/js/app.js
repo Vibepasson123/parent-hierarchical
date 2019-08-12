@@ -2034,11 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
       getUser: this.user,
       relationship: "",
       familyEmail: "",
-      familyMember: "1",
-      familys: [{
-        email: '',
-        relationship: ''
-      }]
+      familyMember: "1"
     };
   },
   created: function created() {
